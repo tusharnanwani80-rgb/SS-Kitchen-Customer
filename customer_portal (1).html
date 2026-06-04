@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Menu | SS Kitchen</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 
+                            50: '#fff7ed',  // Warm off-white
+                            100: '#ffedd5',
+                            500: '#f97316', // Vibrant Orange Accent
+                            600: '#ea580c', 
+                            800: '#292524',
+                            900: '#1c1917'  // Deep Slate/Black
+                        },
+                        veg: '#16a34a'
+                    },
+                    boxShadow: {
+                        'soft': '0 8px 25px -5px rgba(0,0,0,0.06)',
+                        'float': '0 20px 40px -10px rgba(234, 88, 12, 0.25)',
+                        'card': '0 0 0 1px rgba(0,0,0,0.02), 0 8px 20px -2px rgba(0,0,0,0.05)',
+                        'sheet': '0 -15px 40px rgba(0,0,0,0.12)'
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'slide-in-right': 'slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'breathe': 'breathe 2.5s infinite ease-in-out',
+                        'pan-bg': 'panBg 80s linear infinite'
+                    },
+                    keyframes: {
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        slideInRight: { '0%': { opacity: '0', transform: 'translateX(30px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateX(0) scale(1)' } },
+                        popIn: { '0%': { opacity: '0', transform: 'scale(0.9)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+                        breathe: { '0%, 100%': { opacity: '0.8', transform: 'scale(1)' }, '50%': { opacity: '1', transform: 'scale(1.02)' } },
+                        panBg: { '0%': { backgroundPosition: '0px 0px' }, '100%': { backgroundPosition: '450px 450px' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #fafafa; -webkit-tap-highlight-color: transparent; }
+        
+        /* Premium Minimalist Fast Food SVG Background Pattern */
+        .food-pattern {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='450' height='450' xmlns='http://www.w3.org/2000/svg' fill='%231c1917' fill-opacity='0.04'%3E%3Cg transform='translate(60, 60) rotate(-15) scale(2)'%3E%3Cpath d='M4 14v-2h16v2H4zm1-4h14c0-3.87-3.13-7-7-7s-7 3.13-7 7zm-1 6h16v2c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2v-2z'/%3E%3C/g%3E%3Cg transform='translate(350, 80) rotate(25) scale(2)'%3E%3Cpath d='M12 2L2 20h20L12 2zm0 4.5l5.5 10h-11L12 6.5z'/%3E%3Ccircle cx='12' cy='14' r='1.5'/%3E%3Ccircle cx='10' cy='17' r='1.5'/%3E%3Ccircle cx='14' cy='17' r='1.5'/%3E%3C/g%3E%3Cg transform='translate(100, 300) rotate(-20) scale(2)'%3E%3Cpath d='M18 6H6C3.79 6 2 7.79 2 10s1.79 4 4 4h12c2.21 0 4-1.79 4-4s-1.79-4-4-4zm0 6H6c-1.1 0-2-.9-2-2s.9-2 2-2h12c1.1 0 2 .9 2 2s-.9 2-2 2z'/%3E%3Cpath d='M6 8h12v4H6z'/%3E%3C/g%3E%3Cg transform='translate(320, 340) rotate(10) scale(2)'%3E%3Cpath d='M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2 0v20c5.07-.5 9-4.79 9-10s-3.93-9.5-9-10z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 400px 400px;
+            animation: panBg 80s linear infinite;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .modal-overlay { background: rgba(28, 25, 23, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .hw-accel { transform: translateZ(0); will-change: transform, opacity; }
+        button { transition: transform 0.15s ease, background-color 0.15s ease, opacity 0.15s ease; }
+        button:active { transform: scale(0.92); }
+    </style>
+</head>
+<body class="bg-brand-50 text-brand-900 h-screen w-screen flex flex-col relative overflow-hidden">
+
+    <div class="food-pattern"></div>
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed top-4 left-0 right-0 z-[9999] flex flex-col items-center gap-2 pointer-events-none px-6"></div>
+
+    <!-- Header Section -->
+    <header class="px-6 pt-8 pb-4 shrink-0 z-10 w-full">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-white shadow-card flex items-center justify-center text-brand-900">
+                    <i class="ri-restaurant-2-fill text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-2xl leading-none tracking-tight">SS Kitchen</h1>
+                    <div class="flex items-center gap-1 mt-1 text-veg font-bold text-[10px] uppercase tracking-widest bg-white px-2 py-0.5 rounded shadow-sm inline-flex border border-gray-100">
+                        <svg class="w-3 h-3 text-veg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="5" width="90" height="90" rx="15" stroke="currentColor" stroke-width="10"/>
+                            <circle cx="50" cy="50" r="25" fill="currentColor"/>
+                        </svg>
+                        100% Pure Veg
+                    </div>
+                </div>
+            </div>
+            <button onclick="App.UI.toggleHistory()" class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-card text-gray-500 hover:text-brand-900 transition-colors">
+                <i class="ri-history-line text-lg"></i>
+            </button>
+        </div>
+
+        <div class="bg-white/90 backdrop-blur rounded-full flex items-center px-5 py-3.5 shadow-card border border-gray-50">
+            <i class="ri-search-line text-gray-400 text-lg mr-2"></i>
+            <input type="text" placeholder="Search for delicious food..." class="bg-transparent border-none outline-none w-full text-sm font-medium text-brand-900 placeholder-gray-400" readonly onclick="App.UI.toast('Search feature coming soon!', 'info')">
+        </div>
+    </header>
+
+    <!-- Main Scroll Area -->
+    <main class="flex-grow overflow-y-auto no-scrollbar pb-32 px-6 relative w-full" id="main-scroll">
+        
+        <!-- CLICKABLE TRACKING BANNER -->
+        <div id="active-order-banner" onclick="App.UI.toggleTracking()" class="hidden mb-8 bg-brand-900 text-white p-5 rounded-3xl shadow-float relative overflow-hidden animate-slide-up cursor-pointer active:scale-[0.98] transition-transform">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-brand-600 rounded-full blur-2xl pointer-events-none opacity-50"></div>
+            <div class="flex justify-between items-center mb-4 relative z-10">
+                <div>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Tracking Order</p>
+                    <h3 class="font-black text-xl" id="track-id">#0000</h3>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-brand-600/30 flex items-center justify-center animate-pulse border border-brand-500/50">
+                    <!-- Changed to cooking pot icon to match new styling -->
+                    <i class="ri-restaurant-line text-2xl text-brand-500"></i>
+                </div>
+            </div>
+            <div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden mb-3 relative z-10">
+                <div id="track-progress" class="h-full bg-brand-500 transition-all duration-500 ease-in-out w-[20%]"></div>
+            </div>
+            <p id="track-status" class="text-xs font-bold text-gray-200">Order Received by Kitchen</p>
+        </div>
+
+        <div class="flex items-center justify-between mb-4 mt-2">
+            <h2 class="text-xl font-black tracking-tight">Categories</h2>
+        </div>
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar mb-8 pb-2 w-full" id="category-container"></div>
+
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-black tracking-tight">Available Items</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-4 w-full" id="menu-grid">
+            <div class="col-span-2 text-center py-12" id="loading-state">
+                <i class="ri-loader-4-line text-3xl animate-spin text-brand-500 mb-3 block"></i>
+                <p class="font-bold text-sm text-gray-500">Curating the finest veg menu...</p>
+            </div>
+        </div>
+
+        <!-- Prominent App Footer with Branding -->
+        <div class="mt-16 mb-8 text-center flex flex-col items-center justify-center pb-8 animate-breathe">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">App Built & Designed By</p>
+            <a href="https://tusharnanwani80-rgb.github.io/seen-and-sold-check/" target="_blank" class="bg-white/90 backdrop-blur px-6 py-3.5 rounded-full shadow-card hover:border-brand-500 hover:shadow-float transition-all flex items-center gap-2.5 border border-gray-200 active:scale-95 group">
+                <i class="ri-sparkling-fill text-brand-500 text-xl group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-brand-900 tracking-tight text-[15px]">Seen and Sold Agency</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Floating Action Cart -->
+    <div id="floating-cart" class="fixed bottom-6 right-6 z-40 hidden animate-slide-in-right hw-accel">
+        <button onclick="App.UI.toggleCart()" class="bg-brand-900 text-white shadow-float rounded-full pl-5 pr-2 py-2 flex items-center gap-4 hover:bg-brand-800 transition-colors">
+            <div class="flex flex-col text-left">
+                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">My Order</span>
+                <span class="font-black text-sm leading-none" id="floating-cart-total">₹0</span>
+            </div>
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-brand-900 relative">
+                <i class="ri-shopping-bag-3-fill text-lg"></i>
+                <div id="floating-cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-brand-500 text-white rounded-full text-[10px] font-black flex items-center justify-center border-2 border-brand-900">1</div>
+            </div>
+        </button>
+    </div>
+
+    <!-- MODALS & OVERLAYS -->
+
+    <!-- ============================================== -->
+    <!-- DETAILED LIVE TRACKING MODAL (NEW)             -->
+    <!-- ============================================== -->
+    <div id="tracking-modal" class="fixed inset-0 modal-overlay z-[105] hidden flex-col justify-end transition-opacity opacity-0 hw-accel">
+        <div class="bg-gray-50 w-full h-[95dvh] rounded-t-[2.5rem] relative flex flex-col transform translate-y-full transition-transform duration-300 shadow-sheet" id="tracking-modal-content">
+            
+            <!-- Handle -->
+            <div class="w-full flex justify-center pt-4 pb-2 shrink-0">
+                <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+            </div>
+            
+            <button onclick="App.UI.toggleTracking()" class="absolute top-4 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-sm active:scale-90 transition-transform">
+                <i class="ri-close-line text-xl font-bold"></i>
+            </button>
+
+            <div class="flex-grow overflow-y-auto px-6 pb-safe pt-2">
+                
+                <!-- Premium Cooking Illustration SVG -->
+                <div class="flex justify-center mb-4 mt-2">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Soft glow rings -->
+                        <circle cx="70" cy="70" r="55" fill="#f97316" fill-opacity="0.1"/>
+                        <circle cx="70" cy="70" r="40" fill="#f97316" fill-opacity="0.2"/>
+                        <!-- Pot Body -->
+                        <path d="M40 75 C40 100 50 110 70 110 C90 110 100 100 100 75 Z" fill="#ea580c"/>
+                        <!-- Pot Rim -->
+                        <rect x="35" y="65" width="70" height="12" rx="6" fill="#f97316"/>
+                        <!-- Handles -->
+                        <path d="M35 70 C25 70 25 85 35 85" stroke="#ea580c" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M105 70 C115 70 115 85 105 85" stroke="#ea580c" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Animated Steam -->
+                        <path d="M55 50 Q60 40 55 30" stroke="#f97316" stroke-width="4" stroke-linecap="round" class="animate-pulse"/>
+                        <path d="M70 55 Q75 35 70 20" stroke="#f97316" stroke-width="5" stroke-linecap="round" class="animate-pulse" style="animation-delay: 0.2s"/>
+                        <path d="M85 50 Q90 40 85 30" stroke="#f97316" stroke-width="4" stroke-linecap="round" class="animate-pulse" style="animation-delay: 0.4s"/>
+                    </svg>
+                </div>
+                
+                <!-- Status Details -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-black text-brand-900 leading-tight" id="tracking-status-title">Order Status</h2>
+                    <p class="text-sm text-gray-500 font-medium mt-1" id="tracking-status-subtitle">Your package is on the way</p>
+                </div>
+
+                <!-- Active Items inside tracking -->
+                <div id="tracking-items-list" class="mb-6 space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Summary Section -->
+                <div class="bg-white p-5 rounded-3xl shadow-card border border-gray-100 mb-8">
+                    <h3 class="font-black text-brand-900 mb-4 text-base">Order Summary</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                            <span class="text-sm text-gray-500 font-bold">Order ID</span>
+                            <span class="text-sm font-black text-brand-900" id="tracking-modal-id">...</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                            <span class="text-sm text-gray-500 font-bold">Address / Table</span>
+                            <span class="text-sm font-black text-brand-900 truncate max-w-[160px] text-right" id="tracking-modal-address">...</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                            <span class="text-sm text-gray-500 font-bold">Time Placed</span>
+                            <span class="text-sm font-black text-brand-900" id="tracking-modal-time">...</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500 font-bold">Total Price</span>
+                            <span class="text-lg font-black text-brand-600" id="tracking-modal-total">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Refresh Button -->
+                <button onclick="App.API.forceSync()" class="w-full bg-brand-900 text-white py-4 rounded-2xl font-black text-base shadow-float active:scale-[0.98] transition-transform flex justify-center items-center gap-2 mb-2">
+                    <i class="ri-refresh-line"></i> Refresh Live Status
+                </button>
+                <p class="text-center text-[10px] font-bold text-green-600 uppercase tracking-widest mt-4 mb-6"><i class="ri-radar-line animate-pulse"></i> Auto Sync Active</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PREMIUM Product Details Modal (Overlapping Layered Structure) -->
+    <div id="product-modal" class="fixed inset-0 z-[110] hidden flex-col justify-end transition-opacity opacity-0 hw-accel">
+        
+        <!-- Base White Fluid Background -->
+        <div class="absolute inset-0 bg-brand-50 pointer-events-none z-0"></div>
+
+        <!-- Floating Close Button (Top Right) -->
+        <button onclick="App.UI.toggleProduct()" class="absolute top-6 right-6 w-10 h-10 bg-white/60 backdrop-blur-md border border-white/80 rounded-full flex items-center justify-center text-brand-900 shadow-sm z-[120] hover:bg-white transition-colors">
+            <i class="ri-close-line text-xl font-bold"></i>
+        </button>
+
+        <!-- Immersive Background Image (NO SCALING/ZOOMING) -->
+        <div class="absolute top-0 left-0 w-full h-[45vh] z-10 border-b border-gray-100">
+            <img id="pm-img" src="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- HIDDEN EASTER EGG (Revealed perfectly behind the sliding sheet) -->
+        <div class="absolute bottom-0 left-0 w-full h-[55vh] z-10 flex flex-col items-center justify-center opacity-90 pointer-events-none pb-10">
+            <i class="ri-arrow-down-line text-brand-400 text-3xl mb-3 animate-bounce"></i>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">App Built & Designed By</p>
+            <div class="bg-white px-5 py-2.5 rounded-full flex items-center gap-2 border border-gray-200 shadow-sm">
+                <i class="ri-sparkling-fill text-brand-500 text-lg"></i>
+                <span class="font-black text-brand-900 tracking-tight text-sm">Seen and Sold Agency</span>
+            </div>
+        </div>
+
+        <!-- Scrollable Bottom Sheet (Overlaps the image slightly) -->
+        <div class="bg-white w-full h-[60vh] rounded-t-[2.5rem] relative z-20 flex flex-col transform translate-y-full transition-transform duration-300 shadow-sheet" id="product-modal-content">
+            
+            <!-- Handle -->
+            <div class="w-full flex justify-center pt-4 pb-2 shrink-0">
+                <div class="w-12 h-1.5 bg-gray-200 rounded-full"></div>
+            </div>
+
+            <!-- Content Area (Fully Scrollable) -->
+            <div class="flex-grow overflow-y-auto px-7 pt-2 pb-32">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <div class="flex items-center gap-1 text-veg font-bold text-[10px] uppercase tracking-widest bg-green-50 px-2 py-0.5 rounded shadow-sm inline-flex border border-green-100 mb-2">
+                            <svg class="w-3 h-3 text-veg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="5" y="5" width="90" height="90" rx="15" stroke="currentColor" stroke-width="10"/>
+                                <circle cx="50" cy="50" r="25" fill="currentColor"/>
+                            </svg>
+                            100% Pure Veg
+                        </div>
+                        <h2 class="text-3xl font-black text-brand-900 leading-tight" id="pm-name">Item Name</h2>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between mb-5 pb-5 border-b border-gray-100">
+                    <span class="text-3xl font-black text-brand-900" id="pm-price">₹0</span>
+                    <div class="flex gap-2">
+                        <span class="text-xs font-bold text-brand-900 bg-gray-100 px-4 py-2 rounded-full uppercase tracking-wider flex items-center gap-1"><i class="ri-star-fill text-yellow-500"></i> 4.8</span>
+                    </div>
+                </div>
+
+                <h4 class="text-base font-black text-brand-900 mb-2">About this item</h4>
+                <p class="text-sm text-gray-500 font-medium leading-relaxed" id="pm-desc">Description goes here.</p>
+            </div>
+
+            <!-- Floating Pill Action Bar (Locked to the bottom) -->
+            <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-white via-white/95 to-transparent pb-8 pointer-events-none flex justify-center">
+                <div class="bg-brand-900 w-full max-w-sm rounded-full p-1.5 flex items-center justify-between shadow-float pointer-events-auto border border-brand-800">
+                    
+                    <!-- Qty Control inside Pill -->
+                    <div class="flex items-center gap-3 bg-white/10 rounded-full p-1 pl-2 ml-1">
+                        <button onclick="App.Controllers.Product.modQty(-1)" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white font-bold active:bg-white/30 transition-colors"><i class="ri-subtract-line text-sm"></i></button>
+                        <span class="w-4 text-center font-black text-base text-white" id="pm-qty">1</span>
+                        <button onclick="App.Controllers.Product.modQty(1)" class="w-8 h-8 rounded-full bg-white text-brand-900 flex items-center justify-center font-bold active:bg-gray-100 transition-colors"><i class="ri-add-line text-sm"></i></button>
+                    </div>
+                    
+                    <!-- Add Button -->
+                    <button onclick="App.Controllers.Product.addToCart()" class="text-white font-black text-sm px-6 py-3 flex items-center gap-2 active:scale-[0.98] transition-transform rounded-full">
+                        Add item <span class="opacity-30 mx-1">•</span> <span id="pm-total">₹0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 modal-overlay z-[100] hidden flex-col justify-end transition-opacity opacity-0 hw-accel">
+        <div class="bg-white w-full max-h-[90vh] rounded-t-[2rem] relative flex flex-col transform translate-y-full transition-transform duration-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]" id="cart-modal-content">
+            <div class="px-6 py-5 flex justify-between items-center border-b border-gray-100 shrink-0">
+                <div class="flex items-center gap-3">
+                    <button onclick="App.UI.toggleCart()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 active:bg-gray-200 transition-colors">
+                        <i class="ri-arrow-down-s-line text-xl"></i>
+                    </button>
+                    <h2 class="text-xl font-black text-brand-900">My Order</h2>
+                </div>
+                <!-- HIGHLY INTERACTIVE CLEAR CART TRASH BUTTON -->
+                <button onclick="App.Controllers.Cart.clear()" class="text-red-500 bg-red-50 hover:bg-red-100 active:bg-red-200 active:scale-90 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm">
+                    <i class="ri-delete-bin-line text-base"></i>
+                </button>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto p-6 bg-brand-50/40" id="cart-items-container"></div>
+
+            <div class="p-6 bg-white border-t border-gray-100 shrink-0 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+                
+                <!-- REQUIRED NAME + OPTIONAL PHONE & TABLE FORM -->
+                <div class="mb-5 space-y-3">
+                    <div class="relative">
+                        <i class="ri-user-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="checkout-name" placeholder="Your Name *" required class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 font-bold text-sm focus:bg-white focus:border-brand-500 outline-none transition-colors">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="relative">
+                            <i class="ri-phone-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="tel" id="checkout-phone" placeholder="Phone (Opt)" class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 font-bold text-sm focus:bg-white focus:border-brand-500 outline-none transition-colors">
+                        </div>
+                        <div class="relative">
+                            <i class="ri-map-pin-user-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="checkout-table" placeholder="Table No. (Opt)" class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 font-bold text-sm focus:bg-white focus:border-brand-500 outline-none transition-colors">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-bold text-gray-500">Total Price</span>
+                    <span class="font-black text-2xl text-brand-900" id="cart-total-price">₹0</span>
+                </div>
+                
+                <button onclick="App.Controllers.Cart.checkout()" class="w-full bg-brand-900 text-white py-4 rounded-xl font-black text-lg shadow-float active:scale-[0.98] transition-transform flex justify-center items-center gap-2 hover:bg-brand-800">
+                    <i class="ri-shopping-cart-check-fill"></i> Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="fixed inset-0 modal-overlay z-[90] hidden flex-col justify-end transition-opacity opacity-0 hw-accel">
+        <div class="bg-white w-full h-[85vh] rounded-t-[2rem] relative flex flex-col transform translate-y-full transition-transform duration-300" id="history-modal-content">
+            <div class="px-6 py-5 flex justify-between items-center border-b border-gray-100 shrink-0">
+                <h2 class="text-xl font-black text-brand-900">Order History</h2>
+                <button onclick="App.UI.toggleHistory()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 active:bg-gray-200 transition-colors">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-6 bg-brand-50/40" id="history-items-container"></div>
+        </div>
+    </div>
+
+
+    <!-- CORE APPLICATION LOGIC -->
+    <script>
+        const App = {
+            API_URL: 'https://script.google.com/macros/s/AKfycbxTorDXUgY8SvlReaot-JQjvAyGLwMvvmB4S4BO85vJbq0FFR5nhuQv9wSWIJhE4xB-/exec',
+            
+            State: {
+                menu: [], 
+                activeCategory: 'All',
+                cart: {}, 
+                customerId: localStorage.getItem('cust_id') || ('CUST-' + Math.random().toString(36).substr(2, 9)),
+                activeOrder: null, 
+                pastOrders: [], 
+                pollInterval: null,
+                
+                currentProduct: null,
+                modalQty: 1
+            },
+
+            API: {
+                async sync(action, payload = {}) {
+                    payload.action = action;
+                    try {
+                        const res = await fetch(App.API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(payload)
+                        });
+                        return await res.json();
+                    } catch(e) { console.error(e); return null; }
+                },
+                async fetchInitial() {
+                    document.getElementById('loading-state').classList.remove('hidden');
+                    const data = await this.sync("fetchCustomerData", { customerId: App.State.customerId });
+                    document.getElementById('loading-state').classList.add('hidden');
+                    
+                    if(data && data.status === 'success') {
+                        App.State.menu = data.menu;
+                        App.State.activeOrder = data.activeOrder;
+                        App.State.pastOrders = data.pastOrders;
+                        
+                        localStorage.setItem('cust_id', App.State.customerId);
+                        App.Controllers.Menu.renderCategories();
+                        App.Controllers.Menu.renderGrid();
+                        App.Controllers.Orders.renderActive();
+                        App.Controllers.Orders.renderHistory();
+                        
+                        // Populate saved name/phone/table autofill
+                        document.getElementById('checkout-name').value = localStorage.getItem('cust_name') || '';
+                        document.getElementById('checkout-phone').value = localStorage.getItem('cust_phone') || '';
+                        document.getElementById('checkout-table').value = localStorage.getItem('cust_table') || '';
+
+                        if(App.State.activeOrder) this.startPolling();
+                    }
+                },
+                startPolling() {
+                    if(this.pollInterval) clearInterval(this.pollInterval);
+                    this.pollInterval = setInterval(async () => {
+                        const data = await this.sync("fetchCustomerData", { customerId: App.State.customerId });
+                        if(data && data.status === 'success') {
+                            if(data.activeOrder) {
+                                if(App.State.activeOrder && App.State.activeOrder.dispatchStep !== data.activeOrder.dispatchStep) {
+                                    const msgs = ["", "Order Received!", "Preparing in Kitchen!", "Order is Packed!", "Out for Delivery!"];
+                                    App.UI.toast(msgs[data.activeOrder.dispatchStep], 'success');
+                                }
+                                App.State.activeOrder = data.activeOrder;
+                                App.Controllers.Orders.renderActive();
+                            } else {
+                                App.State.activeOrder = null;
+                                App.State.pastOrders = data.pastOrders;
+                                App.Controllers.Orders.renderActive();
+                                App.Controllers.Orders.renderHistory();
+                                App.UI.toast("Order Delivered! Enjoy.", "success");
+                                this.stopPolling();
+                            }
+                        }
+                    }, 10000); 
+                },
+                stopPolling() { clearInterval(this.pollInterval); this.pollInterval = null; }
+            },
+
+            UI: {
+                toast(msg, type = "success") {
+                    const c = document.getElementById('toast-container');
+                    const t = document.createElement('div');
+                    t.className = `bg-brand-900 text-white px-5 py-3.5 rounded-full shadow-float flex items-center gap-3 animate-toast-in font-bold text-sm border border-brand-800`;
+                    const icon = type === 'success' ? '<i class="ri-check-line text-brand-500 text-lg"></i>' : '<i class="ri-error-warning-fill text-brand-500 text-lg"></i>';
+                    t.innerHTML = `${icon} ${msg}`;
+                    c.appendChild(t);
+                    setTimeout(() => { t.style.opacity = '0'; setTimeout(()=>t.remove(),300); }, 3000);
+                },
+                initGestures() {
+                    const modals = [
+                        { id: 'product-modal-content', closeFunc: () => App.UI.toggleProduct() },
+                        { id: 'cart-modal-content', closeFunc: () => App.UI.toggleCart() },
+                        { id: 'history-modal-content', closeFunc: () => App.UI.toggleHistory() },
+                        { id: 'tracking-modal-content', closeFunc: () => App.UI.toggleTracking() }
+                    ];
+
+                    modals.forEach(m => {
+                        const sheet = document.getElementById(m.id);
+                        if(!sheet) return;
+
+                        let startY = 0;
+                        let isDragging = false;
+
+                        sheet.addEventListener('touchstart', (e) => {
+                            const scrollArea = sheet.querySelector('.overflow-y-auto');
+                            if(scrollArea && scrollArea.contains(e.target) && scrollArea.scrollTop > 0) return; 
+
+                            startY = e.touches[0].clientY;
+                            isDragging = true;
+                            sheet.style.transition = 'none'; 
+                        }, { passive: true });
+
+                        sheet.addEventListener('touchmove', (e) => {
+                            if (!isDragging) return;
+                            const deltaY = e.touches[0].clientY - startY;
+
+                            if (deltaY > 0) { 
+                                if (e.cancelable) e.preventDefault();
+                                sheet.style.transform = `translateY(${deltaY}px)`;
+                            } else {
+                                sheet.style.transform = '';
+                            }
+                        }, { passive: false });
+
+                        sheet.addEventListener('touchend', (e) => {
+                            if (!isDragging) return;
+                            isDragging = false;
+                            sheet.style.transition = ''; 
+                            
+                            const deltaY = e.changedTouches[0].clientY - startY;
+                            
+                            if (deltaY > 120) { 
+                                sheet.style.transform = ''; 
+                                m.closeFunc(); 
+                            } else {
+                                sheet.style.transform = ''; 
+                            }
+                        });
+                    });
+                },
+                toggleModal(id, contentId) {
+                    const m = document.getElementById(id);
+                    const c = document.getElementById(contentId);
+                    c.style.transform = ''; 
+                    
+                    if(m.classList.contains('hidden')) {
+                        m.classList.remove('hidden'); m.classList.add('flex');
+                        requestAnimationFrame(() => { 
+                            m.classList.remove('opacity-0'); 
+                            c.classList.remove('translate-y-full'); 
+                        });
+                    } else {
+                        c.classList.add('translate-y-full'); m.classList.add('opacity-0');
+                        setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
+                    }
+                },
+                toggleCart() { 
+                    if(document.getElementById('cart-modal').classList.contains('hidden')) App.Controllers.Cart.renderModal();
+                    this.toggleModal('cart-modal', 'cart-modal-content'); 
+                },
+                toggleHistory() { this.toggleModal('history-modal', 'history-modal-content'); },
+                toggleTracking() { this.toggleModal('tracking-modal', 'tracking-modal-content'); },
+                toggleProduct() { 
+                    const m = document.getElementById('product-modal');
+                    const c = document.getElementById('product-modal-content');
+                    
+                    c.style.transform = ''; 
+                    
+                    if(m.classList.contains('hidden')) {
+                        m.classList.remove('hidden'); m.classList.add('flex');
+                        requestAnimationFrame(() => { 
+                            m.classList.remove('opacity-0'); 
+                            c.classList.remove('translate-y-full'); 
+                        });
+                    } else {
+                        c.classList.add('translate-y-full'); 
+                        m.classList.add('opacity-0');
+                        setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
+                    }
+                }
+            },
+
+            Controllers: {
+                Menu: {
+                    renderCategories() {
+                        const c = document.getElementById('category-container');
+                        const cats = ['All', ...new Set(App.State.menu.map(m=>m.category))];
+                        c.innerHTML = cats.map(cat => `
+                            <button onclick="App.State.activeCategory='${cat}'; App.Controllers.Menu.renderGrid()" 
+                                class="shrink-0 px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all hw-accel ${App.State.activeCategory===cat?'bg-brand-900 text-white shadow-card border border-brand-900':'bg-white text-gray-500 border border-gray-100 shadow-sm'}">
+                                ${cat}
+                            </button>`).join('');
+                    },
+                    renderGrid() {
+                        this.renderCategories();
+                        const g = document.getElementById('menu-grid');
+                        let items = App.State.activeCategory === 'All' ? App.State.menu : App.State.menu.filter(m => m.category === App.State.activeCategory);
+                        
+                        const fallbackSvgURI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 3a9 9 0 0 0-8.995 8.81L3 12h18a9 9 0 0 0-8.995-8.995L12 3zm-9 11v2h18v-2H3z'/%3E%3C/svg%3E";
+                        
+                        g.innerHTML = items.map(i => {
+                            const inCart = App.State.cart[i.id];
+                            const qty = inCart ? inCart.qty : 0;
+                            const imgSrc = i.imageUrl ? i.imageUrl : fallbackSvgURI;
+                            
+                            const controlHTML = qty === 0 
+                                ? `<button onclick="event.stopPropagation(); App.Controllers.Cart.mod('${i.id}', 1)" class="bg-brand-900 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-soft transition-colors hover:bg-brand-800 animate-pop-in whitespace-nowrap">Add</button>`
+                                : `<div class="flex items-center gap-1 bg-gray-100 rounded-full p-0.5 animate-pop-in border border-gray-200" onclick="event.stopPropagation()">
+                                     <button onclick="App.Controllers.Cart.mod('${i.id}', -1)" class="w-6 h-6 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-900 font-bold active:bg-gray-50"><i class="ri-subtract-line text-xs"></i></button>
+                                     <span class="text-xs font-black w-4 text-center text-brand-900">${qty}</span>
+                                     <button onclick="App.Controllers.Cart.mod('${i.id}', 1)" class="w-6 h-6 rounded-full bg-brand-900 text-white shadow-sm flex items-center justify-center font-bold active:bg-brand-800"><i class="ri-add-line text-xs"></i></button>
+                                   </div>`;
+
+                            return `
+                            <div onclick="App.Controllers.Product.open('${i.id}')" class="bg-white rounded-[1.5rem] p-3.5 shadow-card relative flex flex-col hw-accel cursor-pointer active:scale-[0.98] transition-transform">
+                                <div class="absolute top-4 right-4 bg-white/95 backdrop-blur rounded p-1 shadow-sm z-10 border border-gray-100">
+                                    <svg class="w-3 h-3 text-veg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="5" y="5" width="90" height="90" rx="15" stroke="currentColor" stroke-width="10"/>
+                                        <circle cx="50" cy="50" r="25" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                
+                                <div class="w-full aspect-square rounded-[1rem] bg-brand-50 mb-3 overflow-hidden flex items-center justify-center relative shadow-inner">
+                                    <img src="${imgSrc}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='${fallbackSvgURI}'">
+                                </div>
+                                
+                                <div class="flex flex-col flex-grow justify-between">
+                                    <div class="mb-2">
+                                        <h3 class="font-bold text-sm text-brand-900 leading-tight line-clamp-2">${i.name}</h3>
+                                        <p class="text-[10px] text-gray-400 font-bold mt-1 line-clamp-1">${i.desc || i.category}</p>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-auto pt-2 gap-1.5 w-full">
+                                        <span class="font-black text-brand-900 text-base truncate">₹${i.price}</span>
+                                        <div id="control-${i.id}" class="shrink-0" onclick="event.stopPropagation()">
+                                            ${controlHTML}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `}).join('');
+                    },
+                    updateCardControl(id) {
+                        const controlContainer = document.getElementById(`control-${id}`);
+                        if(!controlContainer) return;
+
+                        const inCart = App.State.cart[id];
+                        const qty = inCart ? inCart.qty : 0;
+                        
+                        controlContainer.innerHTML = qty === 0 
+                            ? `<button onclick="event.stopPropagation(); App.Controllers.Cart.mod('${id}', 1)" class="bg-brand-900 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-soft transition-colors hover:bg-brand-800 animate-pop-in whitespace-nowrap">Add</button>`
+                            : `<div class="flex items-center gap-1 bg-gray-100 rounded-full p-0.5 animate-pop-in border border-gray-200" onclick="event.stopPropagation()">
+                                 <button onclick="App.Controllers.Cart.mod('${id}', -1)" class="w-6 h-6 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-900 font-bold active:bg-gray-50"><i class="ri-subtract-line text-xs"></i></button>
+                                 <span class="text-xs font-black w-4 text-center text-brand-900">${qty}</span>
+                                 <button onclick="App.Controllers.Cart.mod('${id}', 1)" class="w-6 h-6 rounded-full bg-brand-900 text-white shadow-sm flex items-center justify-center font-bold active:bg-brand-800"><i class="ri-add-line text-xs"></i></button>
+                               </div>`;
+                    }
+                },
+                
+                Product: {
+                    open(id) {
+                        const item = App.State.menu.find(m => m.id === id);
+                        if(!item) return;
+
+                        App.State.currentProduct = item;
+                        const inCart = App.State.cart[id];
+                        App.State.modalQty = inCart ? inCart.qty : 1;
+
+                        const fallbackSvgURI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 3a9 9 0 0 0-8.995 8.81L3 12h18a9 9 0 0 0-8.995-8.995L12 3zm-9 11v2h18v-2H3z'/%3E%3C/svg%3E";
+                        
+                        document.getElementById('pm-img').src = item.imageUrl || fallbackSvgURI;
+                        document.getElementById('pm-name').textContent = item.name;
+                        document.getElementById('pm-price').textContent = `₹${item.price}`;
+                        document.getElementById('pm-desc').textContent = item.desc || "A delicious premium choice from our curated pure veg menu.";
+
+                        this.updateUI();
+                        App.UI.toggleProduct();
+                    },
+                    modQty(delta) {
+                        App.State.modalQty += delta;
+                        if(App.State.modalQty < 1) App.State.modalQty = 1; 
+                        this.updateUI();
+                    },
+                    updateUI() {
+                        const p = App.State.currentProduct;
+                        document.getElementById('pm-qty').textContent = App.State.modalQty;
+                        document.getElementById('pm-total').textContent = `₹${App.State.modalQty * p.price}`;
+                    },
+                    addToCart() {
+                        const p = App.State.currentProduct;
+                        
+                        if(!App.State.cart[p.id]) {
+                            App.State.cart[p.id] = { ...p, qty: 0 };
+                        }
+                        
+                        App.State.cart[p.id].qty = App.State.modalQty;
+                        
+                        App.Controllers.Menu.updateCardControl(p.id);
+                        App.Controllers.Cart.updateFloatingCart();
+                        
+                        App.UI.toggleProduct();
+                        
+                        setTimeout(() => {
+                            App.UI.toast(`${App.State.modalQty}x ${p.name} updated!`);
+                        }, 300);
+                    }
+                },
+
+                Cart: {
+                    mod(id, val) {
+                        const item = App.State.menu.find(m => m.id === id);
+                        if(!item) return;
+
+                        if(!App.State.cart[id]) {
+                            App.State.cart[id] = { ...item, qty: 0 };
+                        }
+                        
+                        App.State.cart[id].qty += val;
+                        
+                        if(App.State.cart[id].qty <= 0) {
+                            delete App.State.cart[id];
+                        }
+                        
+                        App.Controllers.Menu.updateCardControl(id);
+                        this.updateFloatingCart();
+                        
+                        if(!document.getElementById('cart-modal').classList.contains('hidden')) {
+                            this.renderModal();
+                        }
+                    },
+                    clear() {
+                        if(Object.keys(App.State.cart).length === 0) return;
+                        if(confirm("Clear your order?")) {
+                            App.State.cart = {};
+                            App.Controllers.Menu.renderGrid(); 
+                            this.updateFloatingCart();
+                            App.UI.toggleCart(); 
+                        }
+                    },
+                    updateFloatingCart() {
+                        const items = Object.values(App.State.cart);
+                        const count = items.reduce((s,i) => s + i.qty, 0);
+                        const total = items.reduce((s,i) => s + (i.price * i.qty), 0);
+                        
+                        const floater = document.getElementById('floating-cart');
+                        if(count > 0) {
+                            document.getElementById('floating-cart-count').innerText = count;
+                            document.getElementById('floating-cart-total').innerText = `₹${total}`;
+                            
+                            if(floater.classList.contains('hidden')) {
+                                floater.classList.remove('hidden');
+                                if (navigator.vibrate) navigator.vibrate(50);
+                            } else {
+                                floater.classList.remove('animate-slide-in-right');
+                                void floater.offsetWidth; 
+                                floater.classList.add('animate-pop-in');
+                            }
+                        } else {
+                            floater.classList.add('hidden');
+                            floater.classList.remove('animate-pop-in', 'animate-slide-in-right');
+                        }
+                    },
+                    renderModal() {
+                        const c = document.getElementById('cart-items-container');
+                        const items = Object.values(App.State.cart);
+                        const fallbackSvgURI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 3a9 9 0 0 0-8.995 8.81L3 12h18a9 9 0 0 0-8.995-8.995L12 3zm-9 11v2h18v-2H3z'/%3E%3C/svg%3E";
+                        
+                        if(items.length === 0) {
+                            c.innerHTML = `
+                                <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <i class="ri-shopping-basket-line text-5xl mb-4 text-gray-300"></i>
+                                    <p class="font-bold text-sm">Your order is empty</p>
+                                </div>`;
+                            document.getElementById('cart-total-price').innerText = '₹0';
+                            return;
+                        }
+                        
+                        let total = 0;
+                        c.innerHTML = items.map((item) => {
+                            total += item.price * item.qty;
+                            const imgSrc = item.imageUrl ? item.imageUrl : fallbackSvgURI;
+                            return `
+                            <div class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm mb-3 border border-gray-100">
+                                <div class="w-16 h-16 rounded-xl bg-brand-50 overflow-hidden shrink-0 relative border border-gray-50 flex items-center justify-center">
+                                    <img src="${imgSrc}" class="w-full h-full object-cover" onerror="this.src='${fallbackSvgURI}'">
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="font-bold text-sm text-brand-900 leading-tight mb-1">${item.name}</h4>
+                                    <p class="font-black text-brand-900">₹${item.price}</p>
+                                </div>
+                                <div class="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-full p-1">
+                                    <button onclick="App.Controllers.Cart.mod('${item.id}', -1)" class="w-6 h-6 rounded-full bg-white shadow-sm flex items-center justify-center text-brand-900 font-bold active:bg-gray-200"><i class="ri-subtract-line text-xs"></i></button>
+                                    <span class="w-4 text-center font-black text-xs text-brand-900">${item.qty}</span>
+                                    <button onclick="App.Controllers.Cart.mod('${item.id}', 1)" class="w-6 h-6 rounded-full bg-brand-900 text-white shadow-sm flex items-center justify-center font-bold active:bg-brand-800"><i class="ri-add-line text-xs"></i></button>
+                                </div>
+                            </div>`;
+                        }).join('');
+                        
+                        document.getElementById('cart-total-price').innerText = `₹${total}`;
+                    },
+                    async checkout() {
+                        const items = Object.values(App.State.cart);
+                        if(items.length === 0) return App.UI.toast("Cart is empty", "error");
+                        if(App.State.activeOrder) return App.UI.toast("Please wait for your current order to finish", "error");
+                        
+                        const name = document.getElementById('checkout-name').value;
+                        const phone = document.getElementById('checkout-phone').value;
+                        const table = document.getElementById('checkout-table').value;
+                        
+                        if(!name) return App.UI.toast("Please enter your name", "error");
+
+                        // Save details for next time
+                        localStorage.setItem('cust_name', name);
+                        localStorage.setItem('cust_phone', phone);
+                        localStorage.setItem('cust_table', table);
+
+                        const total = items.reduce((s,i) => s + (i.price * i.qty), 0);
+                        const orderAddress = table ? `Table No. ${table}` : "Dine-in / Pickup";
+
+                        const order = {
+                            id: "#" + Date.now().toString().slice(-4),
+                            customerId: App.State.customerId,
+                            name: name, 
+                            phone: phone || "Not Provided",
+                            address: orderAddress,
+                            items: items.map(i=>({name:i.name, qty:i.qty, price:i.price})),
+                            total: total,
+                            method: "ONLINE", paymentStatus: "Paid", dispatchStep: 1,
+                            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                        };
+
+                        App.UI.toggleCart();
+                        App.State.cart = {}; 
+                        App.Controllers.Menu.renderGrid();
+                        this.updateFloatingCart();
+                        
+                        App.State.activeOrder = order;
+                        App.Controllers.Orders.renderActive();
+                        App.API.startPolling();
+                        
+                        document.getElementById('main-scroll').scrollTo({top: 0, behavior: 'smooth'});
+                        App.UI.toast("Order Placed Successfully!");
+
+                        await App.API.sync("createOrder", {order});
+                    }
+                },
+                Orders: {
+                    renderActive() {
+                        const b = document.getElementById('active-order-banner');
+                        if(!App.State.activeOrder) { 
+                            b.classList.add('hidden'); 
+                            if(!document.getElementById('tracking-modal').classList.contains('hidden')) {
+                                App.UI.toggleTracking();
+                            }
+                            return; 
+                        }
+                        
+                        b.classList.remove('hidden');
+                        document.getElementById('track-id').innerText = App.State.activeOrder.id;
+                        
+                        const step = App.State.activeOrder.dispatchStep;
+                        const w = step===1?'20%':step===2?'50%':step===3?'75%':step===4?'95%':'100%';
+                        document.getElementById('track-progress').style.width = w;
+                        
+                        const msgs = ["", "Order Received", "Preparing in Kitchen", "Packed & Ready", "Out for Delivery", "Delivered"];
+                        const subtitles = ["", "We have received your order.", "Chef is preparing your delicious meal.", "Your order is packed and ready.", "Your order is on the way!", "Enjoy your meal!"];
+                        
+                        document.getElementById('track-status').innerText = msgs[step] || "Completed";
+                        
+                        // Populate Detailed Tracking Modal
+                        document.getElementById('tracking-status-title').innerText = msgs[step] || "Completed";
+                        document.getElementById('tracking-status-subtitle').innerText = subtitles[step] || "";
+                        document.getElementById('tracking-modal-id').innerText = App.State.activeOrder.id;
+                        document.getElementById('tracking-modal-address').innerText = App.State.activeOrder.address;
+                        document.getElementById('tracking-modal-time').innerText = App.State.activeOrder.time;
+                        document.getElementById('tracking-modal-total').innerText = `₹${App.State.activeOrder.total}`;
+
+                        const tContainer = document.getElementById('tracking-items-list');
+                        tContainer.innerHTML = App.State.activeOrder.items.map(item => `
+                            <div class="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mb-3">
+                                <div class="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 font-black text-sm shrink-0 border border-brand-100">${item.qty}x</div>
+                                <div class="flex-grow">
+                                    <h4 class="font-bold text-sm text-brand-900">${item.name}</h4>
+                                    <p class="font-medium text-xs text-gray-500">₹${item.price} each</p>
+                                </div>
+                                <div class="font-black text-brand-900">₹${item.price * item.qty}</div>
+                            </div>
+                        `).join('');
+                    },
+                    renderHistory() {
+                        const c = document.getElementById('history-items-container');
+                        if(App.State.pastOrders.length === 0) {
+                            c.innerHTML = `
+                                <div class="text-center py-20">
+                                    <i class="ri-history-line text-4xl text-gray-300 mb-3 block"></i>
+                                    <p class="font-bold text-gray-400">No past orders found.</p>
+                                </div>`;
+                            return; 
+                        }
+                        
+                        c.innerHTML = App.State.pastOrders.map(o => `
+                            <div class="bg-white p-4 rounded-2xl shadow-sm mb-3 border border-gray-100">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-black text-brand-900">${o.id}</h4>
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase">${o.time}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 font-medium mb-4 line-clamp-2">${o.items.map(i=>`${i.qty}x ${i.name}`).join(', ')}</p>
+                                <div class="flex justify-between items-center pt-3 border-t border-gray-50">
+                                    <p class="font-black text-lg text-brand-900">₹${o.total}</p>
+                                    <button onclick="App.Controllers.Orders.reorder('${o.id}')" class="px-4 py-2 bg-brand-50 text-brand-900 rounded-xl text-xs font-bold active:scale-95 transition-transform flex items-center gap-1 hover:bg-brand-100 border border-brand-100">
+                                        <i class="ri-refresh-line text-sm"></i> Reorder
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    },
+                    reorder(id) {
+                        const o = App.State.pastOrders.find(x=>x.id===id);
+                        if(!o) return;
+                        
+                        let added = 0;
+                        o.items.forEach(oldItem => {
+                            const menuMatch = App.State.menu.find(m => m.name === oldItem.name);
+                            if(menuMatch) {
+                                if(!App.State.cart[menuMatch.id]) App.State.cart[menuMatch.id] = {...menuMatch, qty: 0};
+                                App.State.cart[menuMatch.id].qty += oldItem.qty;
+                                added++;
+                            }
+                        });
+                        
+                        if(added > 0) {
+                            App.Controllers.Menu.renderGrid();
+                            App.Controllers.Cart.updateFloatingCart();
+                            App.UI.toggleHistory();
+                            setTimeout(() => App.UI.toggleCart(), 300);
+                            App.UI.toast("Items loaded from history");
+                        } else {
+                            App.UI.toast("Items are no longer on the menu", "error");
+                        }
+                    }
+                }
+            }
+        };
+
+        // Initialize Native Gestures and Data
+        document.addEventListener("DOMContentLoaded", () => {
+            App.UI.initGestures();
+            App.API.fetchInitial();
+        });
+    </script>
+</body>
+</html>
