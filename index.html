@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Menu | SS Kitchen</title>
     
+    <!-- PWA / Add to Homescreen Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" href="icon.png">
+    
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,7 +111,7 @@
 
         <div class="bg-white/90 backdrop-blur rounded-full flex items-center px-5 py-3.5 shadow-card border border-gray-50">
             <i class="ri-search-line text-gray-400 text-lg mr-2"></i>
-            <input type="text" placeholder="Search for delicious food..." class="bg-transparent border-none outline-none w-full text-sm font-medium text-brand-900 placeholder-gray-400" readonly onclick="App.UI.toast('Search feature coming soon!', 'info')">
+            <input type="text" placeholder="Search for delicious food..." class="bg-transparent border-none outline-none w-full text-sm font-medium text-brand-900 placeholder-gray-400" oninput="App.Controllers.Menu.handleSearch(this.value)">
         </div>
     </header>
 
@@ -378,8 +384,8 @@
                     <span class="font-black text-2xl text-brand-900" id="cart-total-price">₹0</span>
                 </div>
                 
-                <button onclick="App.Controllers.Cart.checkout()" class="w-full bg-brand-900 text-white py-4 rounded-xl font-black text-lg shadow-float active:scale-[0.98] transition-transform flex justify-center items-center gap-2 hover:bg-brand-800">
-                    <i class="ri-shopping-cart-check-fill"></i> Checkout
+                <button id="btn-checkout" onclick="App.Controllers.Cart.checkout()" class="w-full bg-brand-900 text-white py-4 rounded-xl font-black text-lg shadow-float active:scale-[0.98] transition-transform flex justify-center items-center gap-2 hover:bg-brand-800 disabled:opacity-50 disabled:active:scale-100">
+                    <i class="ri-shopping-cart-check-fill"></i> <span id="checkout-btn-text">Checkout</span>
                 </button>
             </div>
         </div>
@@ -407,6 +413,7 @@
             State: {
                 menu: [], 
                 activeCategory: 'All',
+                searchTerm: '',
                 cart: {}, 
                 customerId: localStorage.getItem('cust_id') || ('CUST-' + Math.random().toString(36).substr(2, 9)),
                 activeOrder: null, 
@@ -428,6 +435,19 @@
                         });
                         return await res.json();
                     } catch(e) { console.error(e); return null; }
+                },
+                async forceSync() {
+                    const data = await this.sync("fetchCustomerData", { customerId: App.State.customerId });
+                    if(data && data.status === 'success') {
+                        App.State.menu = data.menu;
+                        App.State.activeOrder = data.activeOrder;
+                        App.State.pastOrders = data.pastOrders;
+                        App.Controllers.Menu.renderCategories();
+                        App.Controllers.Menu.renderGrid();
+                        App.Controllers.Orders.renderActive();
+                        App.Controllers.Orders.renderHistory();
+                        App.UI.toast("Live Status Refreshed", "success");
+                    }
                 },
                 async fetchInitial() {
                     document.getElementById('loading-state').classList.remove('hidden');
@@ -594,10 +614,24 @@
                                 ${cat}
                             </button>`).join('');
                     },
+                    handleSearch(query) {
+                        App.State.searchTerm = query;
+                        this.renderGrid();
+                    },
                     renderGrid() {
                         this.renderCategories();
                         const g = document.getElementById('menu-grid');
                         let items = App.State.activeCategory === 'All' ? App.State.menu : App.State.menu.filter(m => m.category === App.State.activeCategory);
+                        
+                        if (App.State.searchTerm) {
+                            const term = App.State.searchTerm.toLowerCase();
+                            items = items.filter(m => m.name.toLowerCase().includes(term) || (m.desc && m.desc.toLowerCase().includes(term)));
+                        }
+                        
+                        if (items.length === 0) {
+                            g.innerHTML = `<div class="col-span-2 text-center py-12 text-gray-400 font-bold">No items found matching your search.</div>`;
+                            return;
+                        }
                         
                         const fallbackSvgURI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Cpath d='M12 3a9 9 0 0 0-8.995 8.81L3 12h18a9 9 0 0 0-8.995-8.995L12 3zm-9 11v2h18v-2H3z'/%3E%3C/svg%3E";
                         
@@ -836,14 +870,26 @@
                         App.Controllers.Menu.renderGrid();
                         this.updateFloatingCart();
                         
-                        App.State.activeOrder = order;
-                        App.Controllers.Orders.renderActive();
-                        App.API.startPolling();
-                        
-                        document.getElementById('main-scroll').scrollTo({top: 0, behavior: 'smooth'});
-                        App.UI.toast("Order Placed Successfully!");
+                        const btn = document.getElementById('btn-checkout');
+                        const btnText = document.getElementById('checkout-btn-text');
+                        btn.disabled = true;
+                        btnText.innerText = "Processing...";
 
-                        await App.API.sync("createOrder", {order});
+                        const res = await App.API.sync("createOrder", {order});
+                        
+                        btn.disabled = false;
+                        btnText.innerText = "Checkout";
+                        
+                        if(res && res.status === 'success') {
+                            App.State.activeOrder = order;
+                            App.Controllers.Orders.renderActive();
+                            App.API.startPolling();
+                            
+                            document.getElementById('main-scroll').scrollTo({top: 0, behavior: 'smooth'});
+                            App.UI.toast("Order Placed Successfully!");
+                        } else {
+                            App.UI.toast("Failed to place order", "error");
+                        }
                     }
                 },
                 Orders: {
